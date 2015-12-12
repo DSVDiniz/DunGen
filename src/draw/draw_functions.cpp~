@@ -1,0 +1,367 @@
+#include "draw.h"
+
+std::vector<double>Draw::addWave(std::vector<double> pontos,int escolha)
+{
+	int a =0;
+	if(escolha == -1)
+		escolha =rngi(6);
+
+	switch(escolha)
+	{
+		case 0://montanhas senoidais
+			for(int i=0;i<TAMX;++i)
+				for(int j=0;j<TAMY;++j)
+				{
+					pontos[a] += sin(j/(360*RAD))*10;
+					a++;
+				}
+		break;
+
+		case 1://montanhas cosseno
+			for(int i=0;i<TAMX;++i)
+				for(int j=0;j<TAMY;++j)
+				{
+					pontos[a] += cos(i/(360*RAD))*10;
+					a++;
+				}
+		break;
+
+		case 2://picos sen+cos
+			for(int i=0;i<TAMX;++i)
+				for(int j=0;j<TAMY;++j)
+				{
+
+					pontos[a] += (cos((i-64)/(360*3*RAD))*15) + ( sin((j-34)/(360*3*RAD))*15);
+					a++;
+				}
+		break;
+
+		case 3://rosas
+
+		break;
+
+		case 4:
+			for(int i=0;i<TAMX;++i)
+				for(int j=0;j<TAMY;++j)
+				{
+					pontos[a] += (i/4) - (j/4)+cos((j)/(1080*RAD))*10;
+					a++;
+				}
+		break;
+
+		case 5://vales angulares
+			for(int i=0;i<TAMX;++i)
+				for(int j=0;j<TAMY;++j)
+				{
+					pontos[a] += (cos((i+j)/(360*5*RAD))*10 )+( sin((i+j)/(360*5*RAD))*10);
+					a++;
+				}
+		break;
+
+		case 6:
+		break;
+	}
+
+
+	return pontos;
+}
+
+std::vector < Point <int> > Draw::getArea(Matriz m ,Point<UFINT16> p)
+{
+	{
+	//	 -y
+	//-x	+x
+	//	 +y
+	//	+1   //    0    //   -1
+	// 0 1 2 // 9 10 11 //18 19 20
+	// 3 4 5 //12 13 14 //21 22 23
+	// 6 7 8 //15 16 17 //24 25 26
+	}
+
+	std::vector < Point <int> > vec;
+	Point <int> pt;
+	int aux =0,aux2=0;
+	int cima, baixo, esq, dir,cima_l,baixo_l,esq_l,dir_l;
+
+	cima=baixo=esq=dir=cima_l=baixo_l=esq_l=dir_l=0;
+	pt.set(9,9,9);
+	vec.push_back(pt);
+
+	if(p.z-1>1)
+	{
+		aux = get(m,p.x,p.y,p.z-1);
+		if(aux==air)
+		{
+			pt.set(0,0,-1);
+			vec[0]=pt;
+			return vec;
+		}
+		else
+		{
+			cima	=	get(m,p.x,	 p.y+1,	p.z);
+			cima_l	=	get(m,p.x,	 p.y+1,	p.z-1);
+			baixo	=	get(m,p.x,	 p.y-1,	p.z);
+			baixo_l	=	get(m,p.x,	 p.y-1,	p.z-1);
+			esq		=	get(m,p.x-1, p.y,	p.z);
+			esq_l	=	get(m,p.x-1, p.y,	p.z-1);
+			dir		=	get(m,p.x+1, p.y,	p.z);
+			dir_l	=	get(m,p.x+1, p.y,	p.z-1);
+
+			if((cima==air)&&
+			((cima_l==air)||(cima_l==water9)))
+			{
+				pt.set(0,1,0);
+				vec.push_back(pt);
+				aux2++;
+			}
+			if((baixo==air)&&
+			((baixo_l==air)||(baixo_l==water9)))
+			{
+				pt.set(0,-1,0);
+				vec.push_back(pt);
+				aux2++;
+			}
+			if((esq==air)&&
+			((esq_l==air)||(esq_l==water9)))
+			{
+				pt.set(-1,0,0);
+				vec.push_back(pt);
+				aux2++;
+			}
+			if((dir==air)&&
+			((dir_l==air)||(dir_l==water9)))
+			{
+				pt.set(1,0,0);
+				vec.push_back(pt);
+				aux2++;
+			}
+		}
+		if(aux2==0)
+		{
+			pt.set(7,7,7);
+			vec[0]=pt;
+			return vec;
+		}
+	}
+	return vec;
+}
+
+std::list< Point<int> > Draw::checkDirection(Matriz m, Point<UFINT16> p)
+{
+	std::list <Point <int> > v_agua, v_chao;
+	Point <int> aux;
+	int DIR [7];
+	static int aux_dir[][3] = {{0,1,0},{1,1,0},{1,0,0},{1,-1,0},{0,-1,0},{-1,-1,0},{-1,0,0},{-1,1,0}};
+
+	DIR[0]	=	get(m,p.x,		p.y+1,	p.z);
+	DIR[1]	=	get(m,p.x+1,	p.y+1,	p.z);
+	DIR[2] =	get(m,p.x+1,	p.y,	p.z);
+	DIR[3] =	get(m,p.x+1,	p.y-1,	p.z);
+	DIR[4] =	get(m,p.x,		p.y-1,	p.z);
+	DIR[5] =	get(m,p.x-1,	p.y-1,	p.z);
+	DIR[6] = 	get(m,p.x-1,	p.y,	p.z);
+	DIR[7] =	get(m,p.x-1,	p.y+1,	p.z);
+
+	if(p.t>water1)
+	{
+		for(int i=0;i<8;++i)
+		{
+			if(DIR[i]	==air)
+			{
+				aux.set(aux_dir[i][0],aux_dir[i][1],aux_dir[i][2]);
+				v_chao.push_front(aux);
+			}
+			else
+			{
+				if((DIR[i]	>=water1)&&(DIR[i]	<water9)&&(DIR[i]<p.t))
+				{
+
+					aux.set(aux_dir[i][0],aux_dir[i][1],aux_dir[i][2],1);
+					v_agua.push_front(aux);
+				}
+			}
+		}
+	}
+	//if(v_agua.size()>0)
+		//return v_agua;
+	//else
+		return v_chao;
+}
+
+
+void Draw::waterSim(Matriz m)
+{
+
+	std::list < Point<UFINT16> > pts, pts_antigo;
+	std::list < Point<int> > dir_disp;
+	std::vector < Point<int> > aux;
+	Point <UFINT16>tile_embaixo,temp,temp2;
+	int i=0;
+
+	//pegar posições da agua
+	pts_antigo = pts = getTilePosWater(m);
+
+	for(int z=0;z<65;z++)
+	{
+		pts_antigo = pts;
+		//passamos pela lista de pontos do mapa que sao agua
+		for (std::list<Point<UFINT16> >::iterator it = pts.begin(); it != pts.end();it++)
+		{
+			temp.set(0,0,0,0);
+			temp.set((*it).x,(*it).y,(*it).z,(*it).t);
+
+			//criamos um ponto auxiliar que tem o tipo de tile abaixo do ponto que estamos vendo
+			tile_embaixo.set(temp.x,temp.y,temp.z-1,	m[temp.x][temp.y][temp.z-1]);
+
+			if(tile_embaixo.t==air)//se ele for vazio
+			{
+				//a agua cai.
+				--temp.z;
+				it=pts.erase(it);
+				pts.insert(it,temp);
+				it--;
+			}
+			else
+			{
+				if((tile_embaixo.t>=water1)&&(tile_embaixo.t<water9))//se ele for agua
+				{
+
+					//volumeTransfer(temp, tile_embaixo);
+					//se o tile de baixo nao estiver cheio e o tile de cima nao estiver vazio
+					while((tile_embaixo.t<water9)&&(temp.t>=water1))
+					{
+						//passamos agua para o tile abaixo até nao dar mais
+						--temp.t;
+						++tile_embaixo.t;
+					}
+					it=pts.erase(it);
+					pts.insert(it,temp);
+					it--;
+					//precisamos passar por toda lista de pontosde agua para alterar o tipo de tile de baixo
+					for (std::list<Point<UFINT16> >::iterator it2 = pts.begin(); it2 != pts.end(); ++it2)
+					{
+						if(( (*it2).x==tile_embaixo.x)&&( (*it2).y==tile_embaixo.y)&&( (*it2).z==tile_embaixo.z))
+						{
+							it2=pts.erase(it2);
+							pts.insert(it2,tile_embaixo);
+							it2--;
+						}
+					}
+				}
+				else//se for chao ou a agua abaixo estiver cheia (water9)
+				{
+					dir_disp = checkDirection(m,(*it));//checamos as direcoes possiveis para mover a agua
+
+					if(dir_disp.size()>0)
+					{
+						if(dir_disp.front().t==1)//caso ha direcoes com agua
+						{
+							/*std::cout<<"oiA"<<"\n";
+							temp2.set(temp.x,temp.y,temp.z);
+							temp2.add(dir_disp.front().x,dir_disp.front().y,dir_disp.front().z);
+
+							//precisamos passar por toda lista de pontos de agua para alterar o tipo de tile de baixo
+							for (std::list<Point<UFINT16> >::iterator it2 = pts.begin(); it2 != pts.end(); ++it2)
+							{
+								if(( (*it2).x==temp2.x)&&( (*it2).y==temp2.y)&&( (*it2).z==temp2.z))
+								{
+									temp2.setT((*it2).t+1);
+									--temp.t;
+									it2=pts.erase(it2);
+									it=pts.erase(it);
+									pts.insert(it2,temp2);
+									it2--;
+									pts.insert(it,temp);
+									it--;
+								}
+							}*/
+						}
+						else//caso nao ha direcoes com agua
+						{
+							temp2.set(temp.x,temp.y,temp.z,water1);
+							temp2.add(dir_disp.front().x,dir_disp.front().y,dir_disp.front().z);
+							--temp.t;
+							it=pts.erase(it);
+							pts.insert(it,temp);
+							it--;
+							pts.insert(it,temp2);
+						}
+					}
+				}
+			}
+
+		}
+
+		for (std::list<Point<UFINT16> >::iterator it = pts_antigo.begin(); it != pts_antigo.end(); ++it)
+		{
+			insert(m,(*it).x,(*it).y,(*it).z,air);
+		}
+		for (std::list<Point<UFINT16> >::iterator it = pts.begin(); it != pts.end(); ++it)
+		{
+			if(((*it).t-116)!=0)
+				insert(m,(*it).x,(*it).y,(*it).z, (*it).t);
+		}
+
+	}
+}
+
+void Draw::waterSimulation(Matriz m)
+{
+	/*int rand=0;
+	std::vector < int > pts_estados;
+	std::vector < Point<UFINT16> > pts;
+	std::vector < Point<UFINT16> > pts_antigo;
+	std::vector < Point<int> > dir;
+
+	pts = getTilePosition(m,water9);
+
+	pts_estados.resize(pts.size());
+	pts_antigo.resize(pts.size());
+
+	for(unsigned int i=0; i<pts_estados.size();++i)
+	{
+		pts_estados[i] = 0;
+	}
+
+	for(int j=0;j<200;j++)
+	{
+		for(unsigned int i=0; i<pts.size();++i)
+		{
+			pts_antigo[i] = pts[i];
+
+			if(pts_estados[i]<=10)
+			{
+				dir = getArea(m,pts[i]);
+
+				if(dir[0].z==-1)
+				{
+					pts[i].z--;
+				}
+				else
+				{
+					if(dir[0].z==7)
+					{
+						pts_estados[i]++;
+						//stop++;
+					}
+					else
+					{
+						rand = rngi(dir.size(),1);
+						pts[i].x+=dir[rand].x;
+						pts[i].y+=dir[rand].y;
+					}
+				}
+			}
+		}
+		for(unsigned int k=0; k<pts.size();++k)
+		{
+			if(!((pts[k].x==pts_antigo[k].x)&&(pts[k].y==pts_antigo[k].y)&&(pts[k].z==pts_antigo[k].z)))
+			{
+				insert(m,pts[k].x,pts[k].y,pts[k].z, water9);
+				insert(m,pts_antigo[k].x,pts_antigo[k].y,pts_antigo[k].z,air);
+			}
+		}
+	}*/
+}
+
+

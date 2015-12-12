@@ -1,0 +1,57 @@
+#ifndef PRINTER3D_H_
+    #define PRINTER3D_H_
+
+#include "../defines.h"
+#include "../point.h"
+
+#include <iostream>
+#include <vector>
+#include <stdio.h>
+#include <string.h>
+
+#include <GL/glfw.h>
+#include <GL/glu.h>
+
+#define width       800.0
+#define height      640.0
+
+typedef UFINT16 Matriz [TAMX][TAMY][TAMZ];
+
+class Printer3d
+{
+    private:
+        static bool sair;
+        static int op;
+        static GLfloat positionx,positiony,positionz;
+        static GLfloat anglex,angley,anglez;
+        static UFINT16 optMatriz[TAMX*TAMY*TAMZ];
+
+    public:
+		static bool mudou;
+		static bool displayListInit;
+
+        //construtor e destrutor
+        Printer3d();
+        virtual ~Printer3d();
+        static int shellCheck(Matriz mat,Point<UFINT16>xy);
+        static void optimizeMatrix(Matriz mat);
+        static void optimizeMatrix2(Matriz mat);
+        static void clearMatrix();
+        static bool ini(int argc, char **argv);
+        static int addToArrayi(GLint array[],GLint x,GLint y,GLint z,int i);
+        static int addToArrayf(GLfloat array[],GLfloat x,GLfloat y,GLfloat z,int i);
+        static int addToArrays(GLshort array[],GLshort x,GLshort y,GLshort z,int i);
+        static void cubo(Point <GLfloat> p);
+		static void cubo2(Point <GLfloat> p);
+        static void plano(Point <GLfloat> p,GLuint tipo);
+        static void moveView(Point <GLfloat> pos, Point <GLfloat> ang);
+        static void drawObject ();
+        static void render();
+        static void input(int key, int action);
+        static void handleResize(int w,int h);
+        static bool checkSair();
+        static int checkOp();
+        static void changeOp(int i);
+        static GLuint loadTextura(const char * nomeTextura);
+};
+#endif /*PRINTER3D_H_*/

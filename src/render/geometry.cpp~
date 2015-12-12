@@ -1,0 +1,131 @@
+#include "renderer.h"
+
+void Renderer::cubo(int x,int y,int z,int tipo,double s, double t, double u )
+{
+    //     tras
+    //     +---+
+    //  esq+ C +dir
+    //     +---+
+    //     frente
+
+    int r = 0, g = 0,b = 0;
+
+    #ifdef HEIGHTMAP
+		int passo=int(255/(high-low));
+		r=passo*z;
+	#else
+		int n = tipo;
+		r=colorA[n][0];
+		g=colorA[n][1];
+		b=colorA[n][2];
+	#endif
+
+	glBegin(GL_TRIANGLES);
+    {
+    	glColor3ub(r,g,b);
+    	glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
+
+        //cima
+        glNormal3f(0.0,0.0,1.0);
+		glVertex3f(x	, y		, z+u);
+        glVertex3f(x	, y+t	, z+u);
+        glVertex3f(x+s	, y		, z+u);
+
+		glVertex3f(x	, y+t	, z+u);
+        glVertex3f(x+s	, y+t	, z+u);
+        glVertex3f(x+s	, y		, z+u);
+
+        //baixo
+        glNormal3f(0.0,0.0,-1.0);
+		glVertex3f(x	, y		, z);
+		glVertex3f(x+s	, y		, z);
+		glVertex3f(x	, y+t	, z);
+
+		glVertex3f(x	, y+t	, z);
+		glVertex3f(x+s	, y		, z);
+		glVertex3f(x+s	, y+t	, z);
+
+        //tras
+        glNormal3f(0.0,1.0,0.0);
+        glVertex3f(x	, y+t	, z);
+        glVertex3f(x+s	, y+t	, z);
+        glVertex3f(x	, y+t	, z+u);
+
+        glVertex3f(x	, y+t	, z+u);
+        glVertex3f(x+s	, y+t	, z);
+        glVertex3f(x+s	, y+t	, z+u);
+
+        //frente
+        glNormal3f(0.0,-1.0,0.0);
+        glVertex3f(x	, y		, z);
+        glVertex3f(x	, y		, z+u);
+        glVertex3f(x+s	, y		, z);
+
+        glVertex3f(x	, y		, z+u);
+        glVertex3f(x+s	, y		, z+u);
+        glVertex3f(x+s	, y		, z);
+
+        //esq
+        glNormal3f(-1.0,0.0,0.0);
+        glVertex3f(x	, y		, z);
+        glVertex3f(x	, y+t	, z);
+        glVertex3f(x	, y		, z+u);
+
+        glVertex3f(x	, y+t	, z);
+        glVertex3f(x	, y+t	, z+u);
+        glVertex3f(x	, y		, z+u);
+
+        //dir
+        glNormal3f(1.0,0.0,0.0);
+        glVertex3f(x+s	, y		, z);
+        glVertex3f(x+s	, y		, z+u);
+        glVertex3f(x+s	, y+t	, z);
+
+        glVertex3f(x+s	, y+t	, z);
+        glVertex3f(x+s	, y		, z+u);
+        glVertex3f(x+s	, y+t	, z+u);
+    }
+    glEnd();
+}
+
+void Renderer::cuboLines(int x,int y,int z,int r, int g, int b,double s,double t,double u)
+{
+    //     tras
+    //     +---+
+    //  esq+ C +dir
+    //     +---+
+    //     frente
+
+	glBegin(GL_LINE_STRIP);
+    {
+    	glColor3ub(r,g,b);
+
+        //cima
+		glVertex3f(x	, y		, z+u);
+        glVertex3f(x	, y+t	, z+u);
+        glVertex3f(x+s	, y+t	, z+u);
+        glVertex3f(x+s	, y		, z+u);
+        glVertex3f(x	, y		, z+u);
+
+        //baixo
+		glVertex3f(x	, y		, z);
+        glVertex3f(x	, y+t	, z);
+		glVertex3f(x+s	, y+t	, z);
+        glVertex3f(x+s	, y		, z);
+        glVertex3f(x	, y		, z);
+    }
+    glEnd();
+
+    glBegin(GL_LINES);
+    {
+    	glColor3ub(r,g,b);
+		glVertex3f(x	, y+t	, z+u);
+		glVertex3f(x	, y+t	, z);
+		glVertex3f(x+s	, y+t	, z+u);
+		glVertex3f(x+s	, y+t	, z);
+		glVertex3f(x+s	, y		, z+u);
+		glVertex3f(x+s	, y		, z);
+    }
+    glEnd();
+}
+

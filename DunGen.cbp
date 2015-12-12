@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="DunGen" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/DunGen" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add option="-lGL -lglfw -ljson" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/DunGen" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-fexpensive-optimizations" />
+					<Add option="-Os" />
+					<Add option="-O3" />
+					<Add option="-Wunreachable-code" />
+					<Add option="-fmax-errors=1000" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-lGL" />
+					<Add option="-lGLU" />
+					<Add option="-lglfw3" />
+					<Add option="-lX11" />
+					<Add option="-lXxf86vm" />
+					<Add option="-lXrandr" />
+					<Add option="-lpthread" />
+					<Add option="-lXi" />
+					<Add option="-lm" />
+					<Add option="-ljson" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="src/defines.h" />
+		<Unit filename="src/draw/draw.cpp" />
+		<Unit filename="src/draw/draw.h" />
+		<Unit filename="src/draw/draw_functions.cpp" />
+		<Unit filename="src/draw/draw_geometry.cpp" />
+		<Unit filename="src/generate/cavernas.cpp" />
+		<Unit filename="src/generate/cavernas.h" />
+		<Unit filename="src/generate/corredor.cpp" />
+		<Unit filename="src/generate/corredor.h" />
+		<Unit filename="src/generate/diamondSquare.cpp" />
+		<Unit filename="src/generate/diamondSquare.h" />
+		<Unit filename="src/generate/labirinto.cpp" />
+		<Unit filename="src/generate/labirinto.h" />
+		<Unit filename="src/generate/perlinNoise.cpp" />
+		<Unit filename="src/generate/perlinNoise.h" />
+		<Unit filename="src/generate/sala.cpp" />
+		<Unit filename="src/generate/sala.h" />
+		<Unit filename="src/lodePNG/lodepng.cpp" />
+		<Unit filename="src/lodePNG/lodepng.h" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/matrixToQ3Map.cpp" />
+		<Unit filename="src/matrixToQ3Map.h" />
+		<Unit filename="src/parser.cpp" />
+		<Unit filename="src/parser.h" />
+		<Unit filename="src/parsing/mapParser.cpp" />
+		<Unit filename="src/parsing/mapParser.h" />
+		<Unit filename="src/point.h" />
+		<Unit filename="src/render/geometry.cpp" />
+		<Unit filename="src/render/input.cpp" />
+		<Unit filename="src/render/input.h" />
+		<Unit filename="src/render/optimize.cpp" />
+		<Unit filename="src/render/optimize.h" />
+		<Unit filename="src/render/renderer.cpp" />
+		<Unit filename="src/render/renderer.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

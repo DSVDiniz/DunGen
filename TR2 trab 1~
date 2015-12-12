@@ -1,0 +1,18 @@
+Davi Silva Valério Diniz
+10/42271
+Teleinformática e Redes 2 2/2013
+
+Explicar o funcionamento do  do Algoritmo K-Shortest Path.
+
+Este algoritmo tenta achar não somente o menor caminho possivel de um nodo inicial até um nodo final em um grafo G, mas também tenta achar o próximo menor caminho, até o n-esimo menor caminho disponivel em G.
+
+Ele começa primeiro tentando achar o menor caminho (P) entre o inicio (i) e o fim (f) em um grafo composto por nodos, usando o algoritmo de Dijkstra.
+Este menor caminho (P) é guardado.
+Em seguida, pegamos um nodo que pertença à (P), e um nodo (w) que tenha uma conexão com o mesmo. Mas não faz parte de (P).
+Para cada nodo (v) (exceto o destino j), no subcaminho de (P) para (w), construimos um novo grafo G' removendo todos os vertices nos subcaminhos de P de (i) a (v), exceto (v); removendo todas as conexões danificadas pela remoção dos vertices e removendo todas as conexões entre (v) e (j).
+
+Achamos então, o menor caminho Q' de (v) a (j) no grafo G' usando Dijkstra.
+Concatenamos o subcaminho de (P) de (i) a (v) e o caminho Q'.
+Adicionamos Q a lista de arquivos  
+
+

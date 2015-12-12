@@ -1,0 +1,600 @@
+#include "printer3d.h"
+
+struct vector
+{
+	GLfloat x,y,z;
+};
+
+struct normal
+{
+	GLfloat x,y,z;
+};
+
+struct color
+{
+	int r,g,b;
+};
+
+struct texture
+{
+	GLfloat u,v;
+};
+
+struct CUBO
+{
+	vector v;
+	normal n;
+	color c;
+	//texture t;
+};
+
+UFINT16 Printer3d::optMatriz[TAMX*TAMY*TAMZ];
+
+bool 	Printer3d::sair = false;
+bool 	Printer3d::mudou = false;
+bool 	Printer3d::displayListInit = false;
+int 	Printer3d::op = 0;
+
+std::vector< Point<float> > colorVec;
+
+GLfloat Printer3d::positionx    =   0;
+GLfloat Printer3d::positiony    =   0;
+GLfloat Printer3d::positionz    =   -30;
+GLfloat Printer3d::anglex       =   0;
+GLfloat Printer3d::angley       =   0;
+GLfloat Printer3d::anglez       =   180;
+
+GLfloat LightPosition[] 	= {TAMX, TAMX, TAMZ/2, 0.2};
+
+GLfloat LightAmbient	[] 	= {L_AMB_R, L_AMB_G, L_AMB_B, L_AMB_I};
+GLfloat LightDiffuse	[] 	= {L_DIF_R, L_DIF_G, L_DIF_B, L_DIF_I};
+GLfloat light_specular	[] 	= {L_SPC_R, L_SPC_G, L_SPC_B, L_SPC_I};
+GLfloat mat_specular	[]	= {M_SPC_R, M_SPC_G, M_SPC_B, M_SPC_I};
+GLfloat mat_shininess	[] 	= {MAT_SHINE};
+
+static GLfloat	colorArray			[TAMX*TAMY*TAMZ*3];
+static GLfloat	vertexArray			[TAMX*TAMY*TAMZ*8];
+static GLint	indexArray			[TAMX*TAMY*TAMZ*8];
+static GLfloat	normalArray			[TAMX*TAMY*TAMZ*6];
+//static GLshort textureCoordArray	[TAMX*TAMY*TAMZ*3];
+
+static int iNormal, iVertex, iColor, iIndex;
+
+Printer3d::Printer3d()
+{
+	clearMatrix();
+}
+
+Printer3d::~Printer3d()
+{
+	glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_INDEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glfwTerminate();
+}
+
+void Printer3d::clearMatrix()
+{
+	memset(optMatriz,0, sizeof(optMatriz));
+}
+
+int Printer3d::shellCheck(Matriz m,Point<UFINT16> xy)
+{
+	int s=0;
+	s+=m[xy.x-1]	[xy.y-1]	[xy.z-1]	+	m[xy.x]	[xy.y-1]	[xy.z-1]	+	m[xy.x+1]	[xy.y-1]	[xy.z-1]
+	+	m[xy.x-1]	[xy.y]		[xy.z-1]	+	m[xy.x]	[xy.y]		[xy.z-1]	+	m[xy.x+1]	[xy.y]		[xy.z-1]
+	+	m[xy.x-1]	[xy.y+1]	[xy.z-1]	+	m[xy.x]	[xy.y+1]	[xy.z-1]	+	m[xy.x+1]	[xy.y+1]	[xy.z-1]
+
+	+	m[xy.x-1]	[xy.y-1]	[xy.z]	+	m[xy.x]	[xy.y-1]	[xy.z]	+	m[xy.x+1]	[xy.y-1]	[xy.z]
+	+	m[xy.x-1]	[xy.y]		[xy.z]	+								+	m[xy.x+1]	[xy.y]		[xy.z]
+	+	m[xy.x-1]	[xy.y+1]	[xy.z]	+	m[xy.x]	[xy.y+1]	[xy.z]	+	m[xy.x+1]	[xy.y+1]	[xy.z]
+
+	+	m[xy.x-1]	[xy.y-1]	[xy.z+1]	+	m[xy.x]	[xy.y-1]	[xy.z+1]	+	m[xy.x+1]	[xy.y-1]	[xy.z+1]
+	+	m[xy.x-1]	[xy.y]		[xy.z+1]	+	m[xy.x]	[xy.y]		[xy.z+1]	+	m[xy.x+1]	[xy.y]		[xy.z+1]
+	+	m[xy.x-1]	[xy.y+1]	[xy.z+1]	+	m[xy.x]	[xy.y+1]	[xy.z+1]	+	m[xy.x+1]	[xy.y+1]	[xy.z+1];
+	return s;
+}
+
+void Printer3d::optimizeMatrix(Matriz mat)
+{
+    int pos = 0;
+    for(unsigned int k = 0;k < TAMZ; ++k)
+    	for(unsigned int j = 0;j < TAMY; ++j)
+    		for(unsigned int i = 0;i < TAMX; ++i)
+    		{
+
+    			optMatriz[pos]=mat[i][j][k];
+    			++pos;
+    		}
+}
+
+void Printer3d::optimizeMatrix2(Matriz mat)
+{
+    int pos = 0;
+    for(unsigned int k = 0;k < TAMZ; ++k)
+    	for(unsigned int j = 0;j < TAMY; ++j)
+    		for(unsigned int i = 0;i < TAMX; ++i)
+    		{
+    			if(shellCheck(mat,*new Point<UFINT16>(i,j,k))<26)
+					optMatriz[pos]=mat[i][j][k];
+    			++pos;
+    		}
+}
+
+bool Printer3d::ini(int argc, char **argv)
+{
+    int numVideos;
+    GLFWvidmode listaVideos[32];
+
+	colorVec.resize(9);
+	colorVec[0] = *new Point<float>(0,		0,		0);
+	colorVec[1] = *new Point<float>(0,		0,		255);
+	colorVec[2] = *new Point<float>(0,		0,		255);
+	colorVec[3] = *new Point<float>(127,	127,	0);
+	colorVec[4] = *new Point<float>(255,	255,	0);
+	colorVec[5] = *new Point<float>(127,	0,		0);
+	colorVec[6] = *new Point<float>(255,	0,		0);
+	colorVec[7] = *new Point<float>(35,	35,		0);
+	colorVec[8] = *new Point<float>(0,		255,	0);
+	colorVec[9] = *new Point<float>(255,	255,	255);
+	iNormal=iVertex=iColor=iIndex=0;
+    if(!glfwInit())
+    {
+        std::cout<<"GLFW nao pode ser inicializado"<<std::endl;
+        return false;
+    }
+
+    //essa funcao tenta botar estes parametros nos valores desejados, caso nao seja possivel, os valores serao diminuidos
+    glfwOpenWindowHint(GLFW_AUX_BUFFERS     , 1);
+    glfwOpenWindowHint(GLFW_ACCUM_RED_BITS  , 16);
+    glfwOpenWindowHint(GLFW_ACCUM_GREEN_BITS, 16);
+    glfwOpenWindowHint(GLFW_ACCUM_BLUE_BITS , 16);
+    glfwOpenWindowHint(GLFW_ACCUM_ALPHA_BITS, 16);
+    glfwOpenWindowHint(GLFW_FSAA_SAMPLES    , 1);
+
+    if(!glfwOpenWindow(
+        width,height,//width e height da janela
+        5,6,5,0,//r,g,b,a bits (32 bits nesse caso)
+        8,0,//depth e stencil
+        GLFW_WINDOW//fullscreen ou windowed
+        ))
+    {
+        std::cout<<"Janela nao pode ser aberta"<<std::endl;
+        glfwTerminate();
+        return false;
+    }
+    glfwSetWindowTitle("DunGen");//nome da janela
+
+    //glfwSwapInterval(0);//0=vsync off, 1=on
+
+    numVideos = glfwGetVideoModes(listaVideos,32);
+
+    std::cout<<glGetString(GL_VERSION)<<std::endl;
+
+    for(int i=0;i<numVideos;++i)
+        std::cout<<"W: "<<listaVideos->Width<<
+        " H: "<<listaVideos->Height<<
+        " RB: "<<listaVideos->RedBits<<
+        " BB: "<<listaVideos->BlueBits<<
+        " GB: "<<listaVideos->GreenBits<<std::endl;
+
+    //glfwSetKeyCallback(input);
+    glfwSetWindowSizeCallback(handleResize);
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_COLOR_MATERIAL);
+    //glEnable(GL_TEXTURE_2D);
+
+
+	/**ARRAYS**/
+    /*glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_INDEX_ARRAY);
+    //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glColorPointer	(3,	GL_UNSIGNED_BYTE,	0,	colorArray);
+	glVertexPointer	(8,	GL_FLOAT, 			0,	vertexArray);
+
+	glIndexPointer	(GL_INT,	0,	indexArray);
+	glNormalPointer	(GL_FLOAT, 	0,	normalArray);
+
+	glTexCoordPointer(GLint size, GLenum type, GLsizei stride,const GLvoid *pointer);*/
+
+	/**LUZ E SHADING **/
+	glEnable(GL_LIGHTING);
+    glShadeModel (GL_FLAT);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT, LightAmbient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse);
+    glLightfv(GL_LIGHT0, GL_POSITION,LightPosition);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+
+    glEnable(GL_LIGHT0);
+
+    /**PROJECAO DA CAMERA**/
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    float aspect_ratio = height / width;
+    glFrustum(.5, -.5, -.5 * aspect_ratio, .5 * aspect_ratio, 1, 500);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    return true;
+}
+
+GLuint Printer3d::loadTextura(const char * nomeTextura)
+{
+	GLuint texture;
+    glGenTextures(1,&texture); //allocate the memory for texture
+
+    glBindTexture(GL_TEXTURE_2D,texture); //Binding the texture
+
+    if(!glfwLoadTexture2D(nomeTextura, GLFW_BUILD_MIPMAPS_BIT))
+        return -1;
+    else
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+        return texture;
+    }
+}
+
+void GLFWCALL Printer3d::handleResize(int w,int h)
+{
+    glMatrixMode(GL_PROJECTION);
+    float aspect_ratio = height / width;
+
+    glViewport( 0, 0, width, height );
+    glLoadIdentity();
+    glFrustum(.5, -.5, -.5 * aspect_ratio, .5 * aspect_ratio, 1, 500);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void Printer3d::moveView(Point <GLfloat> pos,Point <GLfloat> ang)
+{
+    glTranslatef(pos.x, pos.y, pos.z);
+
+    glRotatef(ang.x, 1, 0, 0);
+    glRotatef(ang.y, 0, 1, 0);
+    glRotatef(ang.z, 0, 0, 1);
+}
+
+void Printer3d::drawObject ()
+{
+    if(!displayListInit)
+    {
+        glNewList(1, GL_COMPILE_AND_EXECUTE);
+        int pos=0;
+		for(unsigned int k = 0;k < TAMZ; ++k)
+        	for(unsigned int j = 0;j < TAMY; ++j)
+        		for(unsigned int i = 0;i < TAMX; ++i)
+        		{
+        			//std::cout<<"."<<optMatriz[pos];
+        			if(optMatriz[pos]!=0)
+        			{
+        				cubo(*new Point<GLfloat>(i,j,k,optMatriz[pos]));
+        			}
+                    ++pos;
+        		}
+        		glBegin(GL_QUADS);
+        glEndList();
+        displayListInit = true;
+        std::cout<<"Renderizacao completa."<<std::endl;
+    }
+    else
+        glCallList(1);
+}
+
+
+
+inline void Printer3d::cubo(Point<GLfloat> p)
+{
+    //     tras
+    //     +---+
+    //  esq+ C +dir
+    //     +---+
+    //     frente
+
+    int r = 0, g = 0,b = 0;
+
+    #ifdef HEIGHTMAP
+		if(p.z>=24)
+			r=255;
+		else
+			r=8*p.z;
+
+		if(p.z==0)
+			b=0;
+		else
+			b=255/p.z;
+	#else
+		r=colorVec[p.t].x;
+		g=colorVec[p.t].y;
+		b=colorVec[p.t].z;
+	#endif
+
+	glBegin(GL_TRIANGLES);
+    {
+    	glColor3ub(r,g,b);
+    	glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
+
+        //cima
+        glNormal3f(0.0,0.0,1.0);
+		glVertex3f(p.x		, p.y		, p.z+1.0);
+		glVertex3f(p.x+1.0	, p.y		, p.z+1.0);
+        glVertex3f(p.x		, p.y+1.0	, p.z+1.0);
+
+		glVertex3f(p.x		, p.y+1.0	, p.z+1.0);
+		glVertex3f(p.x+1.0	, p.y		, p.z+1.0);
+        glVertex3f(p.x+1.0	, p.y+1.0	, p.z+1.0);
+
+        //baixo
+        glNormal3f(0.0,0.0,-1.0);
+		glVertex3f(p.x		, p.y		, p.z);
+		glVertex3f(p.x+1.0	, p.y		, p.z);
+		glVertex3f(p.x		, p.y+1.0	, p.z);
+
+		glVertex3f(p.x		, p.y+1.0	, p.z);
+		glVertex3f(p.x+1.0	, p.y		, p.z);
+		glVertex3f(p.x+1.0	, p.y+1.0	, p.z);
+
+        //tras
+        glNormal3f(0.0,1.0,0.0);
+        glVertex3f(p.x		, p.y+1.0	, p.z);
+        glVertex3f(p.x+1.0	, p.y+1.0	, p.z);
+        glVertex3f(p.x		, p.y+1.0	, p.z+1.0);
+
+        glVertex3f(p.x		, p.y+1.0	, p.z+1.0);
+        glVertex3f(p.x+1.0	, p.y+1.0	, p.z);
+        glVertex3f(p.x+1.0	, p.y+1.0	, p.z+1.0);
+
+        //frente
+        glNormal3f(0.0,-1.0,0.0);
+        glVertex3f(p.x		, p.y		, p.z);
+        glVertex3f(p.x+1.0	, p.y		, p.z);
+        glVertex3f(p.x		, p.y		, p.z+1.0);
+
+        glVertex3f(p.x		, p.y		, p.z+1.0);
+        glVertex3f(p.x+1.0	, p.y		, p.z);
+        glVertex3f(p.x+1.0	, p.y		, p.z+1.0);
+
+        //esq
+        glNormal3f(-1.0,0.0,0.0);
+        glVertex3f(p.x		, p.y		, p.z);
+        glVertex3f(p.x		, p.y		, p.z+1.0);
+        glVertex3f(p.x		, p.y+1.0	, p.z);
+
+        glVertex3f(p.x		, p.y+1.0	, p.z);
+        glVertex3f(p.x		, p.y		, p.z+1.0);
+        glVertex3f(p.x		, p.y+1.0	, p.z+1.0);
+
+        //dir
+        glNormal3f(1.0,0.0,0.0);
+        glVertex3f(p.x+1.0	, p.y		, p.z);
+        glVertex3f(p.x+1.0	, p.y		, p.z+1.0);
+        glVertex3f(p.x+1.0	, p.y+1.0	, p.z);
+
+        glVertex3f(p.x+1.0	, p.y+1.0	, p.z);
+        glVertex3f(p.x+1.0	, p.y		, p.z+1.0);
+        glVertex3f(p.x+1.0	, p.y+1.0	, p.z+1.0);
+    }
+    glEnd();
+}
+
+inline int Printer3d::addToArrayi(GLint array[],GLint x,GLint y,GLint z,int i)
+{
+	array[i]	= x;
+	array[i+1]	= y;
+	array[i+2]	= z;
+	return 3;
+}
+
+inline int Printer3d::addToArrayf(GLfloat array[],GLfloat x,GLfloat y,GLfloat z,int i)
+{
+	array[i]	= x;
+	array[i+1]	= y;
+	array[i+2]	= z;
+	return 3;
+}
+
+inline int Printer3d::addToArrays(GLshort array[],GLshort x,GLshort y,GLshort z,int i)
+{
+	array[i]	= x;
+	array[i+1]	= y;
+	array[i+2]	= z;
+	return 3;
+}
+
+inline void Printer3d::cubo2(Point<GLfloat> p)
+{
+    //     tras
+    //     +---+
+    //  esq+ C +dir
+    //     +---+
+    //     frente
+    int r, g,b;
+    r=colorVec[p.t].x;
+    g=colorVec[p.t].y;
+    b=colorVec[p.t].z;
+
+	//array de normals 1 obj = 6 normais
+	iNormal+=addToArrayf(normalArray,	0,	0,	1,	iNormal);
+	iNormal+=addToArrayf(normalArray,	0,	0,	-1,	iNormal);
+	iNormal+=addToArrayf(normalArray,	0,	1,	0,	iNormal);
+	iNormal+=addToArrayf(normalArray,	0,	-1,	0,	iNormal);
+	iNormal+=addToArrayf(normalArray,	1,	0,	0,	iNormal);
+	iNormal+=addToArrayf(normalArray,	-1,	0,	0,	iNormal);
+
+	//array de vertex 1 obj = 8 vertex
+	iVertex+=addToArrayf(vertexArray,	p.x,	p.y,	p.z+1,	iVertex);
+	iVertex+=addToArrayf(vertexArray,	p.x+1,	p.y,	p.z+1,	iVertex);
+	iVertex+=addToArrayf(vertexArray,	p.x+1,	p.y+1,	p.z+1,	iVertex);
+	iVertex+=addToArrayf(vertexArray,	p.x,	p.y+1,	p.z+1,	iVertex);
+	iVertex+=addToArrayf(vertexArray,	p.x,	p.y,	p.z,	iVertex);
+	iVertex+=addToArrayf(vertexArray,	p.x+1,	p.y,	p.z,	iVertex);
+	iVertex+=addToArrayf(vertexArray,	p.x+1,	p.y+1,	p.z,	iVertex);
+	iVertex+=addToArrayf(vertexArray,	p.x,	p.y+1,	p.z,	iVertex);
+
+	//array de color 1 obj = 1 cor
+	iColor+=addToArrayf(colorArray,		r,	g,	b,	iColor);
+
+	//array de index 1 obj = 12 index
+	iIndex+=addToArrayi(indexArray,1,2,3,iIndex);//cima
+	iIndex+=addToArrayi(indexArray,3,4,1,iIndex);
+
+	iIndex+=addToArrayi(indexArray,5,6,7,iIndex);//baixo
+	iIndex+=addToArrayi(indexArray,7,8,5,iIndex);
+
+	iIndex+=addToArrayi(indexArray,5,1,4,iIndex);//esq
+	iIndex+=addToArrayi(indexArray,4,8,5,iIndex);
+
+	iIndex+=addToArrayi(indexArray,2,6,7,iIndex);//dir
+	iIndex+=addToArrayi(indexArray,7,3,2,iIndex);
+
+	iIndex+=addToArrayi(indexArray,4,3,7,iIndex);//frente
+	iIndex+=addToArrayi(indexArray,7,8,4,iIndex);
+
+	iIndex+=addToArrayi(indexArray,5,6,2,iIndex);//tras
+	iIndex+=addToArrayi(indexArray,2,1,5,iIndex);
+
+	//array de texture
+	//addToArrayf(textureCoordArray,		p.x,	p.y+1,	p.z,	iTexture);
+}
+
+inline void Printer3d::plano(Point <GLfloat> p, GLuint tipo)
+{
+    glBindTexture(GL_TEXTURE_2D,tipo);
+    glBegin(GL_QUADS);
+    {
+        glTexCoord2f(0.0,0.0);     glVertex3f(p.x,     p.y,     p.z);
+        glTexCoord2f(0.0,1.0);     glVertex3f(p.x,     p.y+1.0, p.z);
+        glTexCoord2f(1.0,1.0);     glVertex3f(p.x+1.0, p.y+1.0, p.z);
+        glTexCoord2f(1.0,0.0);     glVertex3f(p.x+1.0, p.y,     p.z);
+    }
+    glEnd();
+}
+
+void Printer3d::render()
+{
+//	input(glfwGetKey());
+    Point <GLfloat> *position = new Point<GLfloat>(positionx,positiony,positionz);
+    Point <GLfloat> *angle = new Point<GLfloat>(anglex,angley,anglez);
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    moveView(*position,*angle);
+
+    glLightfv(GL_LIGHT0, GL_POSITION,LightPosition);
+
+    //moveView(*position,*angle);
+    drawObject();
+    //glDrawArrays(GL_TRIANGLES,0,3);
+
+    glfwSwapBuffers();
+}
+
+void GLFWCALL Printer3d::input(int key, int action)
+{
+    if(action == GLFW_PRESS)
+    {
+        switch(key)
+        {
+            case 'Q':
+                --Printer3d::positionz;
+            break;
+
+            case 'E':
+                ++Printer3d::positionz;
+            break;
+
+            case 'W':
+                --Printer3d::positiony;
+            break;
+
+            case 'A':
+                --Printer3d::positionx;
+            break;
+
+            case 'S':
+                ++Printer3d::positiony;
+            break;
+
+            case 'D':
+                ++Printer3d::positionx;
+            break;
+
+            case GLFW_KEY_UP:
+                Printer3d::anglex-=3;
+            break;
+
+            case GLFW_KEY_DOWN:
+                Printer3d::anglex+=3;
+            break;
+
+            case GLFW_KEY_LEFT:
+                Printer3d::angley-=3;
+            break;
+
+            case GLFW_KEY_RIGHT:
+                Printer3d::angley+=3;
+            break;
+
+            case GLFW_KEY_SPACE:
+                --Printer3d::positionz;
+            break;
+
+            case GLFW_KEY_LCTRL:
+                ++Printer3d::positionz;
+            break;
+
+            case GLFW_KEY_ESC:
+                sair=true;
+                return;
+            break;
+
+            case 'P':
+				std::cout<<sizeof(optMatriz)<<std::endl;
+            break;
+
+            case '1':
+				op=1;
+				mudou =true;
+            break;
+
+            case '2':
+				op=2;
+				mudou =true;
+            break;
+
+            case '3':
+				op=3;
+				mudou =true;
+            break;
+        }
+    }
+    /*std::cout<<" x:"<<positionx<<
+               " y:"<<positiony<<
+               " z:"<<positionz<<
+    std::endl;*/
+}
+bool Printer3d::checkSair()
+{
+    return sair;
+}
+int Printer3d::checkOp()
+{
+    return op;
+}
+void Printer3d::changeOp(int i)
+{
+	op=i;
+}
+
+

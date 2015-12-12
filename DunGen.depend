@@ -1,0 +1,568 @@
+# depslib dependency file v1.0
+1342566542 source:/home/davi/Área de trabalho/Projetos/DunGen/draw.cpp
+	"draw.h"
+
+1340307599 source:/home/davi/Área de trabalho/Projetos/DunGen/printer.cpp
+
+1340307304 source:/home/davi/Área de trabalho/Projetos/DunGen/sala.cpp
+
+1342567081 source:/home/davi/Área de trabalho/Projetos/DunGen/main.cpp
+	"draw.h"
+	<stdio.h>
+	<iostream>
+
+1342566025 /home/davi/Área de trabalho/Projetos/DunGen/draw.h
+	<vector>
+	"point.h"
+	<cmath>
+
+1340980137 /home/davi/Área de trabalho/Projetos/DunGen/point.h
+
+1345562977 source:/home/davi/Desktop/Projetos/DunGen/draw.cpp
+	"draw.h"
+
+1345562981 /home/davi/Desktop/Projetos/DunGen/draw.h
+	"defines.h"
+	"point.h"
+	<vector>
+	<iostream>
+	<cmath>
+	<stdio.h>
+
+1342963548 /home/davi/Desktop/Projetos/DunGen/point.h
+
+1340307599 source:/home/davi/Desktop/Projetos/DunGen/printer.cpp
+
+1340307304 source:/home/davi/Desktop/Projetos/DunGen/sala.cpp
+
+1345796548 source:/home/davi/Desktop/Projetos/DunGen/main.cpp
+	<stdio.h>
+	<iostream>
+	<cmath>
+	<vector>
+	<stdio.h>
+	<iostream>
+	<stdlib.h>
+	<time.h>
+	<vector>
+	<algorithm>
+
+1345636997 /home/davi/Desktop/Projetos/DunGen/defines.h
+
+1345490869 /home/davi/Desktop/Projetos/DunGen/printer3d.h
+	"defines.h"
+	"point.h"
+	<iostream>
+	<vector>
+	<GL/glfw.h>
+	<GL/glu.h>
+
+1345557391 source:/home/davi/Desktop/Projetos/DunGen/printer3d.cpp
+	"printer3d.h"
+
+1352654561 source:/home/davi/Projetos/DunGen/main.cpp
+	"draw.h"
+	"printer3d.h"
+	"cavernas.h"
+	"labirinto.h"
+	"terrain.h"
+	"noise.h"
+
+1340307599 source:/home/davi/Projetos/DunGen/printer.cpp
+
+1352653079 source:/home/davi/Projetos/DunGen/printer3d.cpp
+	"printer3d.h"
+
+1352530830 /home/davi/Projetos/DunGen/printer3d.h
+	"defines.h"
+	"point.h"
+	<iostream>
+	<vector>
+	<stdio.h>
+	<string.h>
+	<GL/glfw.h>
+	<GL/glu.h>
+
+1352460819 /home/davi/Projetos/DunGen/defines.h
+	"inttypes.h"
+
+1342963548 /home/davi/Projetos/DunGen/point.h
+
+1340307304 source:/home/davi/Projetos/DunGen/sala.cpp
+
+1352655177 source:/home/davi/Projetos/DunGen/draw.cpp
+	"draw.h"
+
+1352530056 /home/davi/Projetos/DunGen/draw.h
+	"defines.h"
+	"inttypes.h"
+	"point.h"
+	<vector>
+	<time.h>
+	<stdlib.h>
+	<iostream>
+	<cmath>
+	<stdio.h>
+
+1351913387 source:/home/davi/Projetos/DunGen/noise.cpp
+	"noise.h"
+
+1351913016 /home/davi/Projetos/DunGen/noise.h
+	<stdlib.h>
+	<iostream>
+	<math.h>
+	"draw.h"
+
+1352482262 source:/home/davi/Projetos/DunGen/cavernas.cpp
+	"cavernas.h"
+
+1352482262 /home/davi/Projetos/DunGen/cavernas.h
+	<iostream>
+	<math.h>
+	"draw.h"
+
+1352487193 source:/home/davi/Projetos/DunGen/labirinto.cpp
+	"labirinto.h"
+	<algorithm>
+
+1352482262 /home/davi/Projetos/DunGen/labirinto.h
+	"draw.h"
+
+1352487431 source:/home/davi/Projetos/DunGen/terrain.cpp
+	"terrain.h"
+
+1352486849 /home/davi/Projetos/DunGen/terrain.h
+	<stdlib.h>
+	<iostream>
+	<math.h>
+	"draw.h"
+
+1364899989 source:/home/davi/Projetos/DunGen/src/draw.cpp
+	"draw.h"
+
+1365112930 /home/davi/Projetos/DunGen/src/draw.h
+	"defines.h"
+	"inttypes.h"
+	"point.h"
+	<vector>
+	<time.h>
+	<stdlib.h>
+	<iostream>
+	<cmath>
+	<stdio.h>
+
+1381435051 /home/davi/Projetos/DunGen/src/defines.h
+	"inttypes.h"
+
+1379009556 /home/davi/Projetos/DunGen/src/point.h
+
+1379012479 source:/home/davi/Projetos/DunGen/src/generate/cavernas.cpp
+	"cavernas.h"
+
+1377105401 /home/davi/Projetos/DunGen/src/generate/cavernas.h
+	<iostream>
+	<math.h>
+	"../draw/draw.h"
+
+1377105401 source:/home/davi/Projetos/DunGen/src/generate/labirinto.cpp
+	"labirinto.h"
+
+1377105401 /home/davi/Projetos/DunGen/src/generate/labirinto.h
+	"../draw/draw.h"
+	<algorithm>
+
+1365782381 source:/home/davi/Projetos/DunGen/src/generate/noise.cpp
+	"noise.h"
+
+1369073604 /home/davi/Projetos/DunGen/src/generate/noise.h
+	<stdlib.h>
+	<iostream>
+	<math.h>
+	"../draw/draw.h"
+
+1353449965 source:/home/davi/Projetos/DunGen/src/generate/terrain.cpp
+	"terrain.h"
+
+1353421889 /home/davi/Projetos/DunGen/src/generate/terrain.h
+	<stdlib.h>
+	<iostream>
+	<math.h>
+	"../draw.h"
+
+1366036875 source:/home/davi/Projetos/DunGen/src/render/printer3d.cpp
+	"printer3d.h"
+
+1366036763 /home/davi/Projetos/DunGen/src/render/printer3d.h
+	"../defines.h"
+	"../point.h"
+	"input.h"
+	<iostream>
+	<vector>
+	<stdio.h>
+	<string.h>
+	<GL/glfw.h>
+	<GL/glu.h>
+
+1379374101 source:/home/davi/Projetos/DunGen/src/main.cpp
+	"draw/draw.h"
+	"render/renderer.h"
+	"render/optimize.h"
+	"render/input.h"
+	"generate/cavernas.h"
+	"generate/labirinto.h"
+	"generate/diamondSquare.h"
+	"generate/perlinNoise.h"
+	"parser.h"
+
+1352805088 source:/home/davi/Projetos/DunGen/src/render/render.cpp
+	"render.h"
+
+1352916818 /home/davi/Projetos/DunGen/src/render/render.h
+	"../defines.h"
+	"../point.h"
+	<iostream>
+	<vector>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<GL/glew.h>
+	<GL/glfw.h>
+	<GL/glu.h>
+
+1377105401 /home/davi/Projetos/DunGen/src/render/input.h
+	"../defines.h"
+	"../point.h"
+	<GL/glfw.h>
+	<iostream>
+
+1377105401 source:/home/davi/Projetos/DunGen/src/render/input.cpp
+	"input.h"
+
+1377105401 source:/home/davi/Projetos/DunGen/src/generate/diamondSquare.cpp
+	"diamondSquare.h"
+
+1377105401 /home/davi/Projetos/DunGen/src/generate/diamondSquare.h
+	<stdlib.h>
+	<iostream>
+	<math.h>
+	"../draw/draw.h"
+
+1381434882 source:/home/davi/Projetos/DunGen/src/generate/perlinNoise.cpp
+	"perlinNoise.h"
+
+1378225142 /home/davi/Projetos/DunGen/src/generate/perlinNoise.h
+	<stdlib.h>
+	<iostream>
+	<math.h>
+	"../draw/draw.h"
+	<vector>
+	<algorithm>
+	<string.h>
+
+1364836504 source:/home/davi/Projetos/DunGen/src/generate/efeitos.cpp
+	"../draw.h"
+
+1378819224 source:/home/davi/Projetos/DunGen/src/draw/draw.cpp
+	"draw.h"
+
+1379118767 /home/davi/Projetos/DunGen/src/draw/draw.h
+	"../defines.h"
+	"inttypes.h"
+	"../point.h"
+	<vector>
+	<list>
+	<time.h>
+	<stdlib.h>
+	<iostream>
+	<cmath>
+	<stdio.h>
+	<deque>
+
+1379351790 source:/home/davi/Projetos/DunGen/src/draw/draw_functions.cpp
+	"draw.h"
+
+1377105401 source:/home/davi/Projetos/DunGen/src/draw/draw_geometry.cpp
+	"draw.h"
+
+1377287285 source:/home/davi/Projetos/DunGen/src/render/geometry.cpp
+	"renderer.h"
+
+1377955936 /home/davi/Projetos/DunGen/src/render/renderer.h
+	"../defines.h"
+	"../point.h"
+	"input.h"
+	<iostream>
+	<vector>
+	<stdio.h>
+	<string.h>
+	<GL/glfw.h>
+	<GL/glu.h>
+
+1380733545 source:/home/davi/Projetos/DunGen/src/render/renderer.cpp
+	"renderer.h"
+
+1377105401 source:/home/davi/Projetos/DunGen/src/render/optimize.cpp
+	"optimize.h"
+
+1377956069 /home/davi/Projetos/DunGen/src/render/optimize.h
+	"../defines.h"
+	"inttypes.h"
+	"../point.h"
+	<vector>
+	<list>
+	<time.h>
+	<stdlib.h>
+	<iostream>
+	<cmath>
+	<stdio.h>
+
+1377195532 source:/home/davi/Projetos/DunGen/src/parser.cpp
+	"parser.h"
+
+1377191853 /home/davi/Projetos/DunGen/src/parser.h
+	"defines.h"
+	"point.h"
+	<stdio.h>
+	<string>
+	<iostream>
+	<fstream>
+	<deque>
+	<cstring>
+	<stdlib.h>
+	<jsoncpp/json.h>
+
+1380032410 source:/home/davi/Projetos/DunGen/src/lodePNG/lodepng.cpp
+	"lodepng.h"
+	<stdio.h>
+	<stdlib.h>
+	<fstream>
+
+1380032438 /home/davi/Projetos/DunGen/src/lodePNG/lodepng.h
+	<string.h>
+	<vector>
+	<string>
+	"lodepng.h"
+	<iostream>
+	"lodepng.h"
+
+1395941910 source:/home/davi/Projetos pessoais/DunGen/src/draw/draw.cpp
+	"draw.h"
+
+1395941928 /home/davi/Projetos pessoais/DunGen/src/draw/draw.h
+	"../defines.h"
+	"inttypes.h"
+	"../point.h"
+	<vector>
+	<list>
+	<time.h>
+	<stdlib.h>
+	<iostream>
+	<cmath>
+	<stdio.h>
+	<deque>
+
+1395786369 /home/davi/Projetos pessoais/DunGen/src/defines.h
+	"inttypes.h"
+
+1389301900 /home/davi/Projetos pessoais/DunGen/src/point.h
+
+1379351790 source:/home/davi/Projetos pessoais/DunGen/src/draw/draw_functions.cpp
+	"draw.h"
+
+1390501591 source:/home/davi/Projetos pessoais/DunGen/src/draw/draw_geometry.cpp
+	"draw.h"
+
+1379012479 source:/home/davi/Projetos pessoais/DunGen/src/generate/cavernas.cpp
+	"cavernas.h"
+
+1400541055 /home/davi/Projetos pessoais/DunGen/src/generate/cavernas.h
+	<iostream>
+	<math.h>
+	"../draw/draw.h"
+
+1377105401 source:/home/davi/Projetos pessoais/DunGen/src/generate/diamondSquare.cpp
+	"diamondSquare.h"
+
+1377105401 /home/davi/Projetos pessoais/DunGen/src/generate/diamondSquare.h
+	<stdlib.h>
+	<iostream>
+	<math.h>
+	"../draw/draw.h"
+
+1377105401 source:/home/davi/Projetos pessoais/DunGen/src/generate/labirinto.cpp
+	"labirinto.h"
+
+1400541004 /home/davi/Projetos pessoais/DunGen/src/generate/labirinto.h
+	"../draw/draw.h"
+	<algorithm>
+
+1387807252 source:/home/davi/Projetos pessoais/DunGen/src/generate/perlinNoise.cpp
+	"perlinNoise.h"
+
+1378225142 /home/davi/Projetos pessoais/DunGen/src/generate/perlinNoise.h
+	<stdlib.h>
+	<iostream>
+	<math.h>
+	"../draw/draw.h"
+	<vector>
+	<algorithm>
+	<string.h>
+
+1380032410 source:/home/davi/Projetos pessoais/DunGen/src/lodePNG/lodepng.cpp
+	"lodepng.h"
+	<stdio.h>
+	<stdlib.h>
+	<fstream>
+
+1380032438 /home/davi/Projetos pessoais/DunGen/src/lodePNG/lodepng.h
+	<string.h>
+	<vector>
+	<string>
+	"lodepng.h"
+	<iostream>
+	"lodepng.h"
+
+1400540601 source:/home/davi/Projetos pessoais/DunGen/src/main.cpp
+	"draw/draw.h"
+	"render/renderer.h"
+	"render/optimize.h"
+	"render/input.h"
+	"generate/cavernas.h"
+	"generate/labirinto.h"
+	"generate/diamondSquare.h"
+	"generate/perlinNoise.h"
+	"parser.h"
+	"parsing/mapParser.h"
+	"matrixToQ3Map.h"
+	"generate/sala.h"
+
+1395223451 /home/davi/Projetos pessoais/DunGen/src/render/renderer.h
+	"../defines.h"
+	"../point.h"
+	"input.h"
+	<iostream>
+	<vector>
+	<stdio.h>
+	<string.h>
+	<GLFW/glfw3.h>
+
+1395226870 /home/davi/Projetos pessoais/DunGen/src/render/input.h
+	"../defines.h"
+	"../point.h"
+	<GLFW/glfw3.h>
+	<iostream>
+
+1377956069 /home/davi/Projetos pessoais/DunGen/src/render/optimize.h
+	"../defines.h"
+	"inttypes.h"
+	"../point.h"
+	<vector>
+	<list>
+	<time.h>
+	<stdlib.h>
+	<iostream>
+	<cmath>
+	<stdio.h>
+
+1395786611 /home/davi/Projetos pessoais/DunGen/src/parser.h
+	"defines.h"
+	"point.h"
+	<stdio.h>
+	<string>
+	<iostream>
+	<fstream>
+	<deque>
+	<cstring>
+	<stdlib.h>
+	<jsoncpp/json.h>
+
+1395785947 source:/home/davi/Projetos pessoais/DunGen/src/parser.cpp
+	"parser.h"
+
+1377287285 source:/home/davi/Projetos pessoais/DunGen/src/render/geometry.cpp
+	"renderer.h"
+
+1395784963 source:/home/davi/Projetos pessoais/DunGen/src/render/input.cpp
+	"input.h"
+
+1377105401 source:/home/davi/Projetos pessoais/DunGen/src/render/optimize.cpp
+	"optimize.h"
+
+1395830047 source:/home/davi/Projetos pessoais/DunGen/src/render/renderer.cpp
+	"renderer.h"
+
+1390501713 source:/home/davi/Projetos pessoais/DunGen/src/generate/sala.cpp
+	"sala.h"
+	"../draw/draw.h"
+
+1390501057 /home/davi/Projetos pessoais/DunGen/src/generate/sala.h
+	"../draw/draw.h"
+
+1389284941 source:/home/davi/Projetos pessoais/DunGen/src/matrixToQ3Map.cpp
+	"matrixToQ3Map.h"
+
+1389282362 /home/davi/Projetos pessoais/DunGen/src/matrixToQ3Map.h
+	"defines.h"
+	"point.h"
+	"draw/draw.h"
+	<stdio.h>
+	<string>
+	<iostream>
+	<fstream>
+	<sstream>
+	<deque>
+	<cstring>
+	<stdlib.h>
+
+1390503569 source:/home/davi/Projetos pessoais/DunGen/src/generate/corredor.cpp
+	"corredor.h"
+	"../draw/draw.h"
+
+1390502656 /home/davi/Projetos pessoais/DunGen/src/generate/corredor.h
+	"../draw/draw.h"
+
+1395943277 source:/home/davi/Projetos pessoais/DunGen/src/parsing/mapParser.cpp
+	"mapParser.h"
+
+1395837356 /home/davi/Projetos pessoais/DunGen/src/parsing/mapParser.h
+	"../draw/draw.h"
+	"../defines.h"
+	"../point.h"
+	"strtk.hpp"
+	<iostream>
+	<string>
+	<fstream>
+	<deque>
+	<cstring>
+	<stdlib.h>
+
+946692000 /home/davi/Projetos pessoais/DunGen/src/parsing/strtk.hpp
+	<algorithm>
+	<cctype>
+	<cerrno>
+	<cmath>
+	<cstddef>
+	<cstring>
+	<deque>
+	<exception>
+	<fstream>
+	<iostream>
+	<iterator>
+	<limits>
+	<list>
+	<map>
+	<queue>
+	<set>
+	<sstream>
+	<stack>
+	<stdexcept>
+	<string>
+	<utility>
+	<vector>
+	<boost/lexical_cast.hpp>
+	<boost/random.hpp>
+	<boost/regex.hpp>
+	<windows.h>
+	<sys/time.h>
+	<sys/types.h>
+

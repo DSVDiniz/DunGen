@@ -1,0 +1,15 @@
+
+#include "corredor.h"
+#include "../draw/draw.h"
+
+Corredor::Corredor()
+{
+}
+
+Corredor::Corredor()
+{
+}
+
+Sala::~Corredor()
+{
+}

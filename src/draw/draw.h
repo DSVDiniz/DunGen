@@ -1,0 +1,150 @@
+#ifndef DRAW_H_
+	#define DRAW_H_
+
+#include "../defines.h"
+#include "inttypes.h"
+#include "../point.h"
+
+#include <vector>
+#include <list>
+#include <time.h>
+#include <stdlib.h>
+#include <iostream>
+#include <cmath>
+#include <stdio.h>
+#include <deque>
+
+#ifdef TESTANDOMATRIZ
+	typedef std::vector <std::vector <std::vector <UFINT8> > > Matriz;
+#else
+	typedef UFINT16 Matriz [TAMX][TAMY][TAMZ];
+#endif
+
+class Draw
+{
+	private:
+	public:
+		/**DRAW.CPP**/
+		Draw();
+
+		virtual ~Draw();
+
+		static int rngi(int max, int min=0);
+
+		static double rngf(int max, int min=1);
+
+		static void newSeed(int seed=0);
+
+		static std::list <Point<UFINT16> >getTilePosition(Matriz m, unsigned int t);
+
+		static std::list <Point<UFINT16> >getTilePosWater(Matriz m);
+
+		static std::deque <Point<UFINT16> >getTilePosWaterDeque(Matriz m);
+
+		static UFINT8 get(Matriz m,Point<int> p);
+
+		static std::vector < Point <int> > getArea(Matriz m ,Point<UFINT16> p);
+
+		static UFINT8 get(Matriz m ,int x, int y, int z);
+
+		static UFINT8 get(Matriz m ,Point<UFINT16> p);
+
+		static bool insert(Matriz m ,int x, int y, int z, int t);
+
+		static bool insert(Matriz m ,Point<UFINT16> p);
+
+		static bool insert(Matriz m ,Point<UFINT16> p,int tipo);
+
+		static bool checkArea(Matriz m, Point<UFINT16>xy, Point<UFINT16>wh, UFINT8 t);
+
+		static bool checkArea(Matriz m, Point<UFINT16>xy, Point<UFINT16>wh, std::vector<UFINT8 > tipos);
+
+		static Point<int>getHighLow(Matriz m, char eixo);
+
+		static int countType(Matriz m, unsigned int t);
+
+		/**DRAW_FUNCTIONS.CPP*/
+
+		static std::vector<double> addWave(std::vector <double> pontos,int escolha);
+
+		static void sandFill(Matriz m,Point<UFINT16>p);
+
+		static void waterSimulation(Matriz m);
+
+		static void simpleWaterSim(Matriz m,unsigned int nivel_agua);
+
+		static void waterSim(Matriz m);
+
+		static std::deque< Point<int> > checkDirection(Matriz m, Point<UFINT16> p);
+
+		static std::deque< Point<int> > checkDir(Matriz m, Point<UFINT16> p);
+
+		/**DRAW_GEOMETRY.CPP**/
+		static void ponto(Matriz m,Point<UFINT16> pt );
+
+		static void ponto(Matriz m,UFINT8 tipo,UFINT16 x, UFINT16 y, UFINT16 z);
+
+		static void simpSqrFill(Matriz m, Point<UFINT16> xy, Point<UFINT16> wh);
+
+		static void sqrFill(Matriz m,Point<UFINT16> p1,Point<UFINT16> p2,Point<UFINT16> p3,
+							Point<UFINT16> limInf = *new Point<UFINT16>(),
+							Point<UFINT16> limSup= *new Point<UFINT16>(TAMX,TAMY,TAMZ));
+
+		static void areaPrint2D(Matriz m, Point<int> xy,UFINT8 t1,UFINT8 t2);
+
+		static void areaPrint3D(Matriz m, Point<int> xy,UFINT8 t1,UFINT8 t2);
+
+		static void starPrint2D(Matriz m, Point<int> xy,UFINT8 t1,UFINT8 t2);
+
+		static void starPrint3D(Matriz m, Point<int> xy,UFINT8 t1,UFINT8 t2);
+
+		static void areaPrint2D(Matriz m, int x,int y,int z,UFINT8 t1,UFINT8 t2);
+
+		static void areaPrint3D(Matriz m, int x,int y,int z,UFINT8 t1,UFINT8 t2);
+
+		static void starPrint2D(Matriz m, int x,int y,int z,UFINT8 t1,UFINT8 t2);
+
+		static void starPrint3D(Matriz m, int x,int y,int z,UFINT8 t1,UFINT8 t2);
+
+		static void simetricStarPrint3D(Matriz m, Point<UFINT16> xy,UFINT8 t1,UFINT8 t2);
+
+		static void simetricAreaPrint3D(Matriz m, Point<UFINT16> xy,UFINT8 t1,UFINT8 t2);
+
+		static void linha(Matriz m,Point<UFINT16> ini,Point<UFINT16> fim);
+
+		static void linha(Matriz m,UFINT8 tipo,UFINT16 ix, UFINT16 fx, UFINT16 iy,UFINT16 fy, UFINT16 iz, UFINT16 fz);
+
+		static void rectangleWire(Matriz m,Point<UFINT16> a,Point<UFINT16> b,Point<UFINT16> c,Point<UFINT16> d);
+
+		static void simpRectangleWire(Matriz m,Point<UFINT16> a,Point<UFINT16> c);
+
+		static void sRetangulo(Matriz m,UFINT8 tipo,UFINT16 ix, UFINT16 fx, UFINT16 iy,UFINT16 fy, UFINT16 iz, UFINT16 fz);
+
+		static void poligono(Matriz m,Point<UFINT16> centro,UFINT16 arestas, UFINT16 raio,UFINT16 angulo);
+
+		static void cuboideWire(Matriz m,std::vector <Point <UFINT16> >);
+
+		static void simpCuboideWire(Matriz m,Point<UFINT16>a,Point<UFINT16>g);
+
+		static void simpCuboideShell(Matriz m,Point<UFINT16>a,Point<UFINT16>g);
+
+		static void esfera(Matriz m,Point<UFINT16> centro, UFINT16 raio);
+
+		static void circulo(Matriz m,Point<UFINT16> centro, Point<UFINT16> superficie1,Point<UFINT16> superficie2);
+
+		static void circulo(Matriz m,Point<UFINT16> centro, int raio);
+
+		static void poligono_3d(Matriz m,Point<UFINT16> centro,UFINT16 arestas, UFINT16 altura, UFINT16 raio);
+
+		static void poligono_cilindrico(Matriz m,Point<UFINT16> centro,UFINT16 arestas, UFINT16 altura, UFINT16 raio, UFINT16 angulo = 360);
+
+		static void fill_4(Matriz m,UFINT8 fill_paint, UFINT8 filled,UFINT16 x, UFINT16 y,UFINT16 z=0);
+
+		static void fill_8(Matriz m,UFINT8 fill_paint, UFINT8 filled,UFINT16 x, UFINT16 y,UFINT16 z=0);
+
+		static void fill_6(Matriz m,UFINT8 fill_paint, UFINT8 filled,UFINT16 x,UFINT16 y,UFINT16 z);
+
+		static void fill_26(Matriz m,UFINT8 fill_paint, UFINT8 filled,UFINT16 x, UFINT16 y,UFINT16 z);
+};
+
+#endif /*DRAW_H_*/

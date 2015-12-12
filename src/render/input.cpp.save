@@ -1,0 +1,229 @@
+#include "input.h"
+
+bool Input::instanceFlag = false;
+Input* Input::inputVariable = NULL;
+
+Input * Input::GetInstance ()
+{
+    if (!instanceFlag)
+    {
+        inputVariable = new Input();
+        instanceFlag =true;
+        return inputVariable;
+    }
+    else
+    {
+		return(inputVariable);
+    }
+}
+
+
+Input::~Input()
+{
+    instanceFlag=false;
+}
+
+void Input::ini(Point<UFINT16>pos,Point<UFINT16>ang)
+{
+    positionx=pos.x;
+    positiony=pos.y;
+    positionz=pos.z;
+    xSpeed=ySpeed=zSpeed=pos.t;
+
+    anglex=ang.x;
+    angley=ang.y;
+    anglez=ang.z;
+    xAngSpeed=yAngSpeed=zAngSpeed=ang.t;
+
+    op=amp=pers=oct=0;
+    sair=mudou=false;
+}
+
+void Input::resolve()
+{
+    Point <GLfloat> xyz, abc;
+    if(glfwGetKey('P'))
+    {
+        xyz=getPosition();
+        abc=getAngularPosition();
+        std::cout<<"X:"<<xyz.x<<"\t"<<"Y:"<<xyz.y<<"\t"<<"Z:"<<xyz.z<<"\n";
+        std::cout<<"A:"<<abc.x<<"\t"<<"B:"<<abc.y<<"\t"<<"C:"<<abc.z<<"\n";
+    }
+    if(glfwGetKey('T'))
+    {
+        positionx			=	TAMX/2;
+        positiony			=	TAMY/2;
+        positionz			=	-180;
+        anglex	=	angley	=	0;
+        anglez				=	180;
+    }
+    if(glfwGetKey('Q'))
+        positionz-=zSpeed;
+    if(glfwGetKey('E'))
+        positionz+=zSpeed;
+    if(glfwGetKey('W'))
+        positiony-=ySpeed;
+    if(glfwGetKey('A'))
+        positionx-=xSpeed;
+    if(glfwGetKey('S'))
+        positiony+=ySpeed;
+    if(glfwGetKey('D'))
+        positionx+=xSpeed;
+    if(glfwGetKey(GLFW_KEY_UP))
+        anglex-=xAngSpeed;
+    if(glfwGetKey(GLFW_KEY_DOWN))
+        anglex+=xAngSpeed;
+    if(glfwGetKey(GLFW_KEY_LEFT))
+        angley-=yAngSpeed;
+    if(glfwGetKey(GLFW_KEY_RIGHT))
+        angley+=yAngSpeed;
+	if(glfwGetKey('0'))
+    {
+        op=0;
+        mudou =true;
+    }
+    if(glfwGetKey('1'))
+    {
+        op=1;
+        mudou =true;
+    }
+    if(glfwGetKey('2'))
+    {
+        op=2;
+        mudou =true;
+    }
+    if(glfwGetKey('3'))
+    {
+        op=3;
+        mudou =true;
+    }
+    if(glfwGetKey('4'))
+    {
+        op=4;
+        mudou =true;
+    }
+    if(glfwGetKey('5'))
+    {
+        op=5;
+        mudou =true;
+    }
+    if(glfwGetKey(GLFW_KEY_ESC))
+    {
+        sair = true;
+        return;
+    }
+    if(glfwGetKey('U'))
+        oct+= 1;
+    if(glfwGetKey('J'))
+        oct-= 1;
+
+    if(glfwGetKey('I'))
+        amp+= 0.5;
+    if(glfwGetKey('K'))
+        amp-= 0.5;
+
+    if(glfwGetKey('O'))
+        pers+= 0.5;
+    if(glfwGetKey('L'))
+        pers-= 0.5;
+}
+
+bool Input::getSair()
+{
+    return sair;
+}
+
+void Input::setSair(bool s)
+{
+    sair=s;
+}
+
+bool Input::getMudou()
+{
+    return mudou;
+}
+
+void Input::setMudou(bool m)
+{
+    mudou=m;
+}
+
+int Input::getOp()
+{
+    return op;
+}
+
+void Input::setOp(int o)
+{
+    op=o;
+}
+
+double Input::getP()
+{
+    return pers;
+}
+int Input::getO()
+{
+    return oct;
+}
+double Input::getA()
+{
+    return amp;
+}
+
+
+Point<GLfloat> Input::getPosition()
+{
+    Point <GLfloat> aux;
+    aux.set(positionx,positiony,positionz);
+    return aux;
+}
+
+void Input::setPosition(Point<GLfloat> p)
+{
+    positionx = p.x;
+    positiony = p.y;
+    positionz = p.z;
+}
+void Input::setPosition(GLfloat x,GLfloat y,GLfloat z)
+{
+    positionx = x;
+    positiony = y;
+    positionz = z;
+}
+
+Point<GLfloat> Input::getAngularPosition()
+{
+    Point <GLfloat> aux;
+    aux.set(anglex,angley,anglez);
+    return aux;
+}
+
+void Input::setAngularPosition(Point<GLfloat> p)
+{
+    anglex = p.x;
+    angley = p.y;
+    anglez = p.z;
+}
+
+void Input::setAngularPosition(GLfloat x,GLfloat y,GLfloat z)
+{
+    anglex = x;
+    angley = y;
+    anglez = z;
+}
+
+void Input::setSpeed(Point<GLfloat> p)
+{
+    xSpeed = p.x;
+    ySpeed = p.y;
+    zSpeed = p.z;
+}
+
+void Input::setAngularSpeed(Point<GLfloat> p)
+{
+    xAngSpeed = p.x;
+    yAngSpeed = p.y;
+    zAngSpeed = p.z;
+
+}

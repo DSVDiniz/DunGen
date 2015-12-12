@@ -1,0 +1,41 @@
+"settings":[
+	"caverna":[
+		"matriz":[x,y,z];
+		"volume":{vol};
+		"direcoes":{dir};
+
+	];
+
+	"labirinto":[
+		"matriz":[x,y,z];
+		"usaVolume":{"true"};
+		"direcoes":{dir};
+	];
+
+	"mapa2d":[
+		"matriz":[x,y,z];
+		"OPA":[oct,pers,amp];
+		"dimenRemov":{"X"};
+		"paralax":{"true"};
+		"numParalax":{3};
+		"agua":{"true"};
+		"aguaVol":{vol};
+		"functions":[
+			"f1":{""};
+			"f2":{""}
+		]
+	];
+
+	"mapa3d":[
+		"matriz":[x,y,z];
+		"OPA":[oct,pers,amp];
+		"limites":[inf, sup];
+		"agua":{"true"};
+		"aguaVol":{vol};
+		"functions":[
+			"f1":{""};
+			"f2":{""}
+		]
+	];
+];
+	

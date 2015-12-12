@@ -1,0 +1,23 @@
+
+Compilar com "make all" na pasta com o arquivo makefile, 
+"make clean" para limpar, vai gerar dois arquivos, um de debug e outro de release, ambos estao na pasta bin.
+
+Teclas:
+1:	gera cavernas
+2:	gera labirintos
+3:	gera heighmaps (não funciona)
+4:	perlin noise (terreno)
+5:	gera novo seed
+
+
+Q:	movimenta a camera para tras(zoom out)
+E:	movimenta a camera para frente(zoom in)
+W:	movimenta a camera para cima
+A:	movimenta a camera para esquerda
+S:	movimenta a camera para baixo
+D:	movimenta a camera para direita
+setas: 	movimentam o angulo da camera
+ESC:	termina programa
+
+OBS: comecei a ter falhas de segmentacao quando juntava cavernas com o perlin noise, então desabilitei isso por enquanto.
+

@@ -1,0 +1,26 @@
+#ifndef CAVERNA_H_
+	#define CAVERNA_H_
+
+
+#include <iostream>
+#include <math.h>
+#include "../draw/draw.h"
+
+
+class Caverna
+{
+    private:
+		UFINT8 numDir, wall_tile,floor_tile,empty_tile;
+		UFINT16 vol;
+		Point<int> *xy,*wh;
+    public:
+		Caverna();
+		~Caverna();
+
+		void iniCaverna(Matriz m,Point<UFINT8> tiles,Point<int> xy_i,Point<int> wh_i,UFINT8 numDir, UFINT16 vol);
+		bool gerador3D(Matriz m);
+
+};
+
+#endif /*CAVERNA_H_*/
+
